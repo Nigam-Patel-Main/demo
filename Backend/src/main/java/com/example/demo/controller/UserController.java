@@ -1,8 +1,11 @@
 package com.example.demo.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +18,7 @@ import com.example.demo.repository.UserRepository;
 
 @RestController
 @RequestMapping("user")
+@CrossOrigin
 public class UserController {
 	
 	@Autowired
@@ -26,9 +30,11 @@ public class UserController {
 	}
 	
 	@PostMapping("add")
-	public String add(@RequestBody User user) {
-		userRepository.add(user); 
-		return "User succussfully added.";
+	public Map<String, String> add(@RequestBody User user) {
+		userRepository.add(user);
+		Map<String, String> map = new HashMap<>();
+		map.put("message", "User addded succussfully");
+		return map;
 	}
 	
 	
