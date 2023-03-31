@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { User } from './user';
 
 @Component({
@@ -11,41 +12,40 @@ export class UserComponent implements OnInit {
 
   users: Array<User>;
 
-  id: number | undefined;
-  name: string;
-  age: number | undefined;
+  addForm: FormGroup;
 
   constructor(
-    private httpClient: HttpClient
+    private httpClient: HttpClient,
+    private formBuilder: FormBuilder
   ) {
     this.users = [];
-    this.id = undefined;
-    this.name = '';
-    this.age = undefined;
+    this.addForm = this.formBuilder.group({});
   }
 
   ngOnInit(): void {
+    this.initForm();
     this.getUserList();
   }
 
-  
+  initForm() {
+    this.addForm = this.formBuilder.group({
+      id: new FormControl(undefined, Validators.required),
+      name: new FormControl(undefined, Validators.required),
+      age: new FormControl(undefined, [Validators.required, Validators.max(100)]),
+    });
+  }
   getUserList() {
     this.httpClient.get<Array<User>>("http://127.0.0.1/user/list").subscribe((users) => {
       this.users = users;
     })
   }
 
-  addUser() {
-    console.log(this.id)
-    console.log(this.name)
-    console.log(this.age)
-    let body = {
-      "id": this.id,
-      "name": this.name,
-      "age": this.age
-    }
+  getId() {
+    return this.addForm.controls['id'];
+  }
 
-    this.httpClient.post<Array<User>>("http://127.0.0.1/user/add", body).subscribe((response) => {
+  submitUserForm() {
+    this.httpClient.post<Array<User>>("http://127.0.0.1/user/add", this.addForm.value).subscribe((response) => {
       this.getUserList();
     })
   }

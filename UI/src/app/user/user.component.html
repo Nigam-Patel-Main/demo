@@ -4,7 +4,18 @@
 
 <hr>
 
-Id: <input type="number" [(ngModel)]="id"><br>
-Name: <input type="text" [(ngModel)]="name"><br>
-Age: <input type="number" [(ngModel)]="age"><br>
-<button type="button" (click)="addUser()">Add User</button>
+<form [formGroup]="addForm" (ngSubmit)="submitUserForm()">
+
+    Id: <input type="number" formControlName="id"> <br>
+    Name: <input type="text" formControlName="name"><br>
+    Age: <input type="number" formControlName="age"><br>
+
+    <span *ngIf="this.addForm.get('age')?.touched">
+        <span *ngIf="this.addForm.get('age')?.invalid" style="color: red;">
+            <span *ngIf="this.addForm.get('age')?.hasError('required')">This filed is required</span>
+            <span *ngIf="this.addForm.get('age')?.hasError('max')">Length shoould be correct</span>
+        </span>
+    </span>
+
+    <button type="submit" [disabled]="!this.addForm.valid">Add User</button>
+</form>

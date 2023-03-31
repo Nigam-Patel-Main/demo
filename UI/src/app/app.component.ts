@@ -17,6 +17,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+
     setTimeout(() => {
       this.isShowHomeComponent = false
     }, 5 * 1000);
