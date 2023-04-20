@@ -15,8 +15,8 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.authorizeHttpRequests((authz) -> authz.anyRequest().authenticated()).addFilterBefore(myCustomFilter,
-				UsernamePasswordAuthenticationFilter.class).csrf().disable();
+		http.authorizeHttpRequests().anyRequest().permitAll().and()
+				.addFilterBefore(myCustomFilter, UsernamePasswordAuthenticationFilter.class).csrf().disable();
 		return http.build();
 	}
 }
